@@ -1,9 +1,14 @@
 # Nabin Sharma
 # Oct 19, 2013
 #
-# You need pygame installed to run this program. I worked on
-# python 3.3 and there was no imread support using standard
-# PIL based modules. So I used pygame to read images.
+# You might need pygame installed to run this program. I worked on
+# python 3.3 and there was no imread support using standard PIL
+# based modules. So I used pygame to read images.
+#
+# If you are using Python 2.x, you should be good. Just use
+# pylab.imread().
+#
+# TODO (Nabin): Don't import and use pygame if PIL is installed.
 
 import numpy
 import pygame
