@@ -1,7 +1,6 @@
 # Nabin Sharma
 # Oct 20, 2013
 
-import decimal
 import numpy
 import pylab
 
