@@ -12,12 +12,14 @@ def leaky_integrator(M, N):
     lmb = (M - 1) / M
     return (1 - lmb) * lmb**numpy.arange(N)
 
+
 def get_xticks(dates_ts, start_idx):
     str2date = lambda strdate: "{}-{}-{}".format(strdate[:4], strdate[4:6],
                                                  strdate[6:])
     pos_xticks = numpy.linspace(start_idx, len(dates_ts)-1, 6)
     label_xticks = [str2date(str(int(dates_ts[p]))) for p in pos_xticks]
     return pos_xticks, label_xticks
+
 
 def main():
     M = 100
@@ -86,7 +88,6 @@ def main():
     ax.grid(True)
 
     plt.show()
-
 
 
 if __name__ == "__main__":

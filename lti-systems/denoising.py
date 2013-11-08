@@ -12,6 +12,7 @@ def leaky_integrator(M, N):
     lmb = (M - 1) / M
     return (1 - lmb) * lmb**numpy.arange(N)
 
+
 def example1():
     x1 = numpy.sin(2*numpy.pi*40*numpy.arange(1000)/1000)
     x2 = numpy.sin(2*numpy.pi*80*numpy.arange(1000)/1000)
@@ -104,8 +105,6 @@ def example3():
         pylab.plot(y)
         pylab.title("y, M = %d" % m)
     pylab.show()
-
-
 
 
 if __name__ == "__main__":
