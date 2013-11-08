@@ -6,8 +6,9 @@ examples in the the Coursera offering of Digital Signal Processing
 by Paolo Prandoni and Martin Vetterli.
 
 
-Although I coded the examples, all the intellectual property and
-copyrights belong to Paolo and Martin.
+Although I re-coded (Matlab code is available in course website) the
+examples in Python, all the intellectual property and copyrights belong
+to Paolo and Martin.
 
 
 Nabin Sharma
