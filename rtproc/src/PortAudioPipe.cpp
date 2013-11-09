@@ -84,9 +84,10 @@ void PortAudioPipe::Start() {
 		error();
 
 	// Infinite loop for all the operations.
+  nodelay(stdscr, TRUE);
 	while(1) {
-		r = _kbhit();
-		if(r == 0) {
+		r = getch();
+		if(r == ERR) {
       // No key is pressed on the keyboard.
 			err = Pa_ReadStream( stream, sampleBlock, FRAMES_PER_BUFFER );
 			if( err && CHECK_OVERFLOW )
