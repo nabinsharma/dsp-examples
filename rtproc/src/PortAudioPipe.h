@@ -8,12 +8,17 @@
 //
 // Modified by: Nabin Sharma, Nov 08, 2013.
 
+#pragma once
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 #include <conio.h>
+
 #include "PortAudio.h"
-#include "soundProcessor.h"
+
+#include "SoundProcessor.h"
+
 #define SAMPLE_RATE  (44100)
 #define FRAMES_PER_BUFFER (4)
 #define NUM_CHANNELS    (1)
@@ -58,28 +63,25 @@
 }
 #define PRINTF_S_FORMAT "%d"
 #endif
-class portAudioPipe
-{
-public:
-	portAudioPipe();
-	virtual ~portAudioPipe();
+
+class PortAudioPipe {
+ public:
+	PortAudioPipe();
+	virtual ~PortAudioPipe();
 	void Initial();
 	void Start();
 	void Stop();
-	void printOptions();
+	void PrintOptions();
 	void error();
 	void xrun();
-public:
+ public:
 	soundProcessor m_soundProcessor;
 	int option;
 
-private:
+ private:
 	PaStreamParameters inputParameters, outputParameters;
-    PaStream *stream;
-    PaError err;
-    char *sampleBlock, *samplePointer;
+  PaStream *stream;
+  PaError err;
+  char *sampleBlock, *samplePointer;
 	char *currentBlock;
-
-
-
 };
