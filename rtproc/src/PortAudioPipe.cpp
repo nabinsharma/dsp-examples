@@ -104,9 +104,9 @@ void PortAudioPipe::Start() {
 			err = Pa_WriteStream( stream, sampleBlock, FRAMES_PER_BUFFER );
 			if( err && CHECK_UNDERFLOW ) 
 				xrun();       
-		} else if (r != 0) {
+		} else {
       // A key is pressed.
-			int option = _getch();
+			int option = getch();
 			if (option == 'q' || option == 'Q') {
 				Stop();
 				return;
