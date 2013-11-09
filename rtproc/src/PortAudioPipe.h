@@ -75,7 +75,7 @@ class PortAudioPipe {
 	void error();
 	void xrun();
  public:
-	soundProcessor m_soundProcessor;
+	SoundProcessor m_soundProcessor;
 	int option;
 
  private:
