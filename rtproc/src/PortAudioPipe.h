@@ -13,7 +13,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <conio.h>
+#include <ncurses.h>
 
 #include "PortAudio.h"
 
