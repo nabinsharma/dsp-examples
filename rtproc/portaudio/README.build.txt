@@ -9,7 +9,8 @@ Source:
   (http://www.portaudio.com/download.html)
 
 Build:
-  1. Replace *-Werror* by *-Wall* in Configure.in
+  1. Replace *-Werror* by *-Wall* in CFLAGS (in Mac OS X section of file
+     Configure.in).
   2. The file has support up to OSX 10.7 only. So replace
      10.7 in one of the (last) xcodebuild blocks by 10.9.
      For example,
