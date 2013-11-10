@@ -23,9 +23,9 @@
 #define FRAMES_PER_BUFFER (4)
 #define NUM_CHANNELS    (1)
 #define NUM_SECONDS     (15)
-/* @todo Underflow and overflow is disabled until we fix priming of blocking write. */
-#define CHECK_OVERFLOW  (0)
-#define CHECK_UNDERFLOW  (0)
+/*@todo Underflow and overflow is disabled until we fix priming of blocking write.*/
+#define CHECK_OVERFLOW  false
+#define CHECK_UNDERFLOW  false
 
 /* Select sample format. */
 #if 0

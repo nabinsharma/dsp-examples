@@ -1,19 +1,23 @@
+SYS_LDIR = /usr/lib
 PA_IDIR = portaudio/include
 PA_LDIR = portaudio/lib
 SRC_DIR = src
 
-OBJS = $(PA_LDIR)/libportaudio.a $(SRC_DIR)/SoundProcessor.o \
-	$(SRC_DIR)/PortAudioPipe.o
+OBJS = $(PA_LDIR)/libportaudio.dylib $(SRC_DIR)/main.o \
+	$(SRC_DIR)/SoundProcessor.o $(SRC_DIR)/PortAudioPipe.o
 
 CC = g++
-CFLAGS = -Wall -c
+CFLAGS = -Wall -g -c
+LFLAGS = -Wall -g
 
 rtproc: $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o rtproc
+	$(CC) $(LFLAGS) $(OBJS) \
+	$(SYS_LDIR)/libstdc++.dylib $(SYS_LDIR)/libncurses.dylib \
+	-o rtproc
 
 main.o: $(SRC_DIR)/main.cpp
 	$(CC) $(CFLAGS) $(SRC_DIR)/main.cpp
- 
+
 pipe.o: $(PA_IDIR)/portaudio.h
 	$(CC) $(CFLAGS) $(SRC_DIR)/PortAudioPipe.cpp
 
@@ -21,4 +25,4 @@ processor.o: $(SRC_DIR)/SoundProcessor.h
 	$CC) $(CFLAGS) $(SRC_DIR)/SoundProcessor.cpp
 
 clean:
-	\rm $(SRC_DIR)/*.o rtproc
+	rm *.o $(SRC_DIR)/*.o rtproc
