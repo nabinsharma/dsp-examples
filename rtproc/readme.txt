@@ -15,8 +15,8 @@ libraries - check /usr/lib).
 
 From rtproc folder, run makefile to get rtproc binary.
 
-So far, I have not been able to listen anything other than
-REALLY unpleasant clicks.
+Use (mic/)headphone instead of lounspeaker to avoid feedback
+issues.
 
 Nabin Sharma
 Nov 12, 2013
