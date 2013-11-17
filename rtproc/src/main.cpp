@@ -22,9 +22,9 @@
 
 int main(void)
 {
-	// Instantiate a pipe. 
-	PortAudioPipe m_Pipe;
-	m_Pipe.Initial();
-	m_Pipe.Start();
+  // Instantiate a pipe.
+  PortAudioPipe m_Pipe;
+  m_Pipe.Initial();
+  m_Pipe.Start();
   return(0);
 }

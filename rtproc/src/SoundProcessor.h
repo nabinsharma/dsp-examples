@@ -12,42 +12,42 @@
 
 class SoundProcessor {
  public:
-	SoundProcessor(void);
-	~SoundProcessor(void);
-	void SetFunction(int ix);
-	void Init(int SamplingRate) {m_SR = SamplingRate;};
-	float Process(float Sample);
+  SoundProcessor(void);
+  ~SoundProcessor(void);
+  void SetFunction(int ix);
+  void Init(int SamplingRate) {m_SR = SamplingRate;}
+  float Process(float Sample);
 
- protected:	
-	// Core processing algorithms.
-	float Delta();
-	float Echo();
-	float IIREcho();
-	float NaturalEcho();
-	float Reverb();
-	float BiQuad();
-	float Tremolo();
-	float Fuzz();
-	float Flanger();
-	float Wah();
+ protected:
+  // Core processing algorithms.
+  float Delta();
+  float Echo();
+  float IIREcho();
+  float NaturalEcho();
+  float Reverb();
+  float BiQuad();
+  float Tremolo();
+  float Fuzz();
+  float Flanger();
+  float Wah();
 
-	// Sampling rate.
-	int m_SR;
-  
-	// 10 sec @ 24KHz.
-	enum {BUF_LEN = 60000};
-	enum{BUF_MASK=BUF_LEN};
-	float m_pY[BUF_LEN];
-	float m_pX[BUF_LEN];
-	int m_Ix;
-	int m_Iy;
-	int m_If;
+  // Sampling rate.
+  int m_SR;
 
-	enum {MAX_ENTRIES = 20};	
+  // 10 sec @ 24KHz.
+  enum {BUF_LEN = 60000};
+  enum {BUF_MASK = BUF_LEN};
+  float m_pY[BUF_LEN];
+  float m_pX[BUF_LEN];
+  int m_Ix;
+  int m_Iy;
+  int m_If;
 
-	float CoreProcess() {
-		float y;
-		switch(m_If) {
+  enum {MAX_ENTRIES = 20};
+
+  float CoreProcess() {
+    float y;
+    switch (m_If) {
       case 0:
       default:
         y = Delta();
@@ -79,7 +79,7 @@ class SoundProcessor {
       case 9:
         y = Tremolo();
         break;
-		}
-		return y;
-	}
+    }
+    return y;
+  }
 };
