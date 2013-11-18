@@ -10,6 +10,21 @@
 
 #pragma once
 
+#include <string>
+
+const std::string kCoreProcesses[] = {
+  "Delta",
+  "Echo",
+  "IIR Echo",
+  "Natural Echo",
+  "Reverb",
+  "BiQuad",
+  "Fuzz",
+  "Flanger",
+  "Wah",
+  "Tremolo"};
+
+
 class SoundProcessor {
  public:
   SoundProcessor(void);
@@ -17,6 +32,7 @@ class SoundProcessor {
   void SetFunction(int ix);
   void Init(int SamplingRate) {m_SR = SamplingRate;}
   float Process(float Sample);
+  int Option() {return m_If;}
 
  protected:
   // Core processing algorithms.
@@ -46,6 +62,8 @@ class SoundProcessor {
   enum {MAX_ENTRIES = 20};
 
   float CoreProcess() {
+    // Numbering should match with the indices
+    // in kCoreProcesses array defined above.
     float y;
     switch (m_If) {
       case 0:

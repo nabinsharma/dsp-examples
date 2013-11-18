@@ -81,9 +81,8 @@ class PortAudioPipe {
   void PrintOptions();
   void error();
   void xrun();
- public:
+
   SoundProcessor m_soundProcessor;
-  int option;
 
  private:
   PaStreamParameters inputParameters, outputParameters;
@@ -91,4 +90,5 @@ class PortAudioPipe {
   PaError err;
   char *sampleBlock, *samplePointer;
   char *currentBlock;
+  int option;
 };

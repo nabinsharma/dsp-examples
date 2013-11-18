@@ -15,6 +15,7 @@
 
 namespace {
 // Printing accessories.
+const int kOptionStartLine = 3;
 WINDOW *wnd;
 int num_rows, num_cols;
 int current_row;
@@ -38,9 +39,24 @@ bool ClearScreen() {
 }
 
 void PrintSingleLineMsg(std::string msg) {
-  current_row += 1;
-  current_row %= num_rows;
   mvprintw(current_row, 0, msg.c_str());
+  current_row += 1;
+  refresh();
+}
+
+void HighlightOption(int option, int prev_option) {
+  wmove(wnd, prev_option + kOptionStartLine, 0);
+  attroff(A_STANDOUT);
+  std::stringstream ss;
+  ss << prev_option << ": " << kCoreProcesses[prev_option];
+  addstr(ss.str().c_str());
+  refresh();
+  wmove(wnd, option + kOptionStartLine, 0);
+  attron(A_STANDOUT);
+  ss.str(std::string());
+  ss.clear();
+  ss << option << ": " << kCoreProcesses[option];
+  addstr(ss.str().c_str());
   refresh();
 }
 }
@@ -149,9 +165,7 @@ void PortAudioPipe::Start() {
     } else {
       // A key is pressed. (ASCII('0', 'Q', 'q') = (48, 81, 113).
       option = r - 48;
-      std::stringstream ss;
-      ss << "Your option is " << option;
-      PrintSingleLineMsg(ss.str());
+      HighlightOption(option, m_soundProcessor.Option());
       if (option == 33 || option == 65) {
         Stop();
         endwin();
@@ -211,15 +225,11 @@ void PortAudioPipe::xrun() {
 void PortAudioPipe::PrintOptions() {
   PrintSingleLineMsg("-----------------------------");
   PrintSingleLineMsg("Please choose a sound effect:");
-  PrintSingleLineMsg("0: Delta");
-  PrintSingleLineMsg("1: Echo");
-  PrintSingleLineMsg("2: IIR echo");
-  PrintSingleLineMsg("3: Natural echo");
-  PrintSingleLineMsg("4: Reverb");
-  PrintSingleLineMsg("5: Biquad");
-  PrintSingleLineMsg("6: Fuzz");
-  PrintSingleLineMsg("7: Flanger");
-  PrintSingleLineMsg("8: Wah");
-  PrintSingleLineMsg("9: Tremolo");
-  PrintSingleLineMsg("Q: Quit");
+  PrintSingleLineMsg("-----------------------------");
+  for (int i = 0; i < sizeof(kCoreProcesses) / sizeof(kCoreProcesses[0]); ++i) {
+    std::stringstream option_msg;
+    option_msg << i << ": " << kCoreProcesses[i];
+    PrintSingleLineMsg(option_msg.str());
+  }
+  PrintSingleLineMsg("\nQ: Quit");
 }
