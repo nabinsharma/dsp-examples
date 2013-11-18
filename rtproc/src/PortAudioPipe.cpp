@@ -30,14 +30,6 @@ void InitNcurses() {
   refresh();
 }
 
-bool ClearScreen() {
-  if (current_row > num_rows - 14) {
-    current_row = 0;
-    return true;
-  }
-  return false;
-}
-
 void PrintSingleLineMsg(std::string msg) {
   mvprintw(current_row, 0, msg.c_str());
   current_row += 1;
@@ -166,17 +158,15 @@ void PortAudioPipe::Start() {
     } else {
       // A key is pressed. (ASCII('0', 'Q', 'q') = (48, 81, 113).
       option = r - 48;
-      HighlightOption(option, m_soundProcessor.Option());
       if (option == 33 || option == 65) {
         Stop();
         endwin();
         return;
       }
-      m_soundProcessor.SetFunction(option);
-      if (ClearScreen()) {
-        clear();
-        refresh();
-        PrintOptions();
+      if (option >= 0 && option < sizeof(kCoreProcesses) /
+          sizeof(kCoreProcesses[0])) {
+        HighlightOption(option, m_soundProcessor.Option());
+        m_soundProcessor.SetFunction(option);
       }
     }
   }
