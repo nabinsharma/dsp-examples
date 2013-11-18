@@ -116,6 +116,7 @@ void PortAudioPipe::Start() {
   PrintOptions();
   int option = 0;
   m_soundProcessor.SetFunction(option);
+  HighlightOption(option, option);
 
   // Start the stream.
   err = Pa_OpenStream(
