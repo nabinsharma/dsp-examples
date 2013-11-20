@@ -24,7 +24,7 @@ def example1():
     # Power of the noise.
     sigma2 = 0.1 
     # Gaussian noise.
-    noise = sigma2*numpy.random.randn(2000)
+    noise = numpy.sqrt(sigma2)*numpy.random.randn(2000)
    
     # Noisy version of x.
     xNoisy = noise + x
@@ -69,7 +69,7 @@ def example2():
     wavfile.write("jingle_orig.wav", fs, jingle)
 
     sigma2 = 0.01
-    noise = sigma2*numpy.random.randn(len(jingle))
+    noise = numpy.sqrt(sigma2)*numpy.random.randn(len(jingle))
     jingleNoisy = jingle + noise
     wavfile.write("jingle_noisy.wav", fs, jingleNoisy)
 
