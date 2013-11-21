@@ -2,7 +2,7 @@
 # Coursera/EPFL
 
 # Nabin Sharma
-# Nov 06, 2013
+# Nov 20, 2013
 
 from __future__ import division
 import numpy
