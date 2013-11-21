@@ -2,7 +2,7 @@
 # Coursera/EPFL
 
 # Nabin Sharma
-# Nov 06, 2013
+# Nov 20, 2013
 
 from __future__ import division
 import numpy
@@ -12,19 +12,13 @@ import scipy.signal as signal
 from scipy.io import loadmat, wavfile
 
 
-def uniform_noise(nr, nc=1, a=0.0, b=1.0):
-    return numpy.squeeze(a + (b-a) * numpy.random.rand(nr, nc))
+def quantize(x, R, A=1):
+    D = 2*A / 2**R
+    xQuant = D * (numpy.floor(x/D) + 0.5)
+    errQuant = x - xQuant
+    return xQuant, errQuant
 
 
-def gaussian_noise(nr, nc=1, m=0.0, sigma2=1.0):
-    return numpy.squeeze(m + numpy.sqrt(sigma2) * numpy.random.randn(nr, nc))
-
-
-def leaky_integrator(K=10, L=100):
-    lmb = (K-1) / K
-    return (1 - lmb) * lmb**numpy.arange(L)
-
-    
 def write_and_play(fs, x, filename):
     # Write wav file.
     wavfile.write(filename+".wav", fs, x)
@@ -36,74 +30,85 @@ def write_and_play(fs, x, filename):
         pass
 
 
-def main():
-    # Number of samples.
-    N = 10000
-    # Number of realizations.
-    M = 5000
-    # Generate uniform noise (each column is a realization).
-    noise1 = uniform_noise(N, M, a=-1.7, b=1.7)
-    # Generate Gaussian noise (each column is a realization).
-    noise2 = gaussian_noise(N, M)
-    # write_and_play(8192, noise1[:, 0], "noise1")
-    # write_and_play(8192, noise2[:, 0], "noise2")
-    pl.figure()
-    pl.subplot(211)
-    pl.stem(noise1[:100, 0])
-    pl.ylabel("noise1")
-    pl.subplot(212)
-    pl.stem(noise2[:100, 0])
-    pl.ylabel("noise2")
-    pl.xlabel("samples")
+def example1():
+    # Two period sawtooth signal between -A and A.
+    A = 1
+    x = numpy.arange(-A+0.02, 1+0.02, 0.04)
+    x = numpy.hstack((x, x))
+    numberBits = (3, 2)
+    for R in numberBits:
+        xQuant, errQuant = quantize(x, R)
+        pl.figure()
+        pl.subplot(211)
+        pl.title("numberBits = {}".format(R))
+        pl.plot(x,label='x')
+        pl.hold(True)
+        pl.plot(xQuant, linestyle='o', marker='o', color='r',
+                fillstyle="none", label="xQuant")
+        pl.legend()
+        pl.subplot(212)
+        pl.plot(errQuant, linestyle='o', marker='o', color='r',
+                fillstyle="none")
+        pl.xlabel("samples")
+        pl.ylabel("errorQuant")
+        pl.ylim(-0.2, 0.2)
 
-    Noise1 = numpy.fft.fft(noise1, n=N, axis=0)
-    Noise2 = numpy.fft.fft(noise2, n=N, axis=0)
-    psdNoise1 = numpy.mean(numpy.abs(Noise1)**2, 1) / N
-    psdNoise2 = numpy.mean(numpy.abs(Noise2)**2, 1) / N
-    pl.figure()
-    pl.subplot(211)
-    pl.plot(numpy.arange(N)/N, psdNoise1)
-    pl.ylim(0, 1.5)
-    pl.ylabel("psdNoise1")
-    pl.subplot(212)
-    pl.plot(numpy.arange(N)/N, psdNoise2)
-    pl.ylim(0, 1.5)
-    pl.ylabel("psdNoise2")
-    pl.xlabel("normalized frequencies")
 
-    pl.figure()
-    pl.subplot(211)
-    pl.hist(noise1[:, 0], bins=50)
-    pl.ylabel("noise1 recurrences")
-    pl.subplot(212)
-    pl.hist(noise2[:, 0], bins=50)
-    pl.ylabel("noise2 recurrences")
-    pl.xlabel("values")
+def example2():
+    # Two period sinusoid between -A and A.
+    A = 1
+    x = numpy.sin(2*numpy.pi*numpy.arange(0, 100, 2)/100)
+    x = numpy.hstack((x, x))
+    numberBits = (3, 2)
+    for R in numberBits:
+        xQuant, errQuant = quantize(x, R)
+        pl.figure()
+        pl.subplot(211)
+        pl.title("numberBits = {}".format(R))
+        pl.plot(x,label='x')
+        pl.hold(True)
+        pl.plot(xQuant, linestyle='o', marker='o', color='r',
+                fillstyle="none", label="xQuant")
+        pl.legend()
+        pl.subplot(212)
+        pl.plot(errQuant, linestyle='o', marker='o', color='r',
+                fillstyle="none")
+        pl.xlabel("samples")
+        pl.ylabel("errorQuant")
+        pl.ylim(-0.2, 0.2)
 
-    # Leaky integrator.
-    h = leaky_integrator()
-    H = numpy.fft.fft(h, N)
-    absH2 = numpy.abs(H)**2
+    # Generate a 1000 period sinusoid between -1 and 1.
+    x = numpy.sin(2*numpy.pi*numpy.arange(10000)/10)
+    # Quantize with 3 bits.
+    xQuant, _ = quantize(x, 3)
+    write_and_play(8192, x, "sine_orig")
+    write_and_play(8192, xQuant, "sine_quantized_3-bits".format(R))
 
-    # psdY = (|H|**2) * psdX
-    psdY = numpy.tile(absH2, [N, M]) * psdNoise2
 
-    pl.figure()
-    pl.subplot(311)
-    pl.plot(numpy.arange(N)/N, psdNoise2)
-    pl.ylim(0, 1.5)
-    pl.ylabel("psdNoise2")
-    pl.subplot(312)
-    pl.plot(numpy.arange(N)/N, absH2)
-    pl.ylim(0, 1.5)
-    pl.ylabel("squareMagH")
-    pl.subplot(313)
-    pl.plot(numpy.arange(N)/N, psdY)
-    pl.ylim(0, 1.5)
-    pl.ylabel("psdY")
-    pl.xlabel("normalized frequencies")
+def example3():
+    jingle = loadmat("jingle.mat")
+    fs = jingle['Fs'][0][0]
+    jingle = jingle['jingle'][0]
+    
+    max_value = numpy.max(jingle)
+    min_value = numpy.min(jingle)
+    dyn_range = max_value - min_value
+    scaling_factor = 2 / dyn_range
+    offset = -1 - scaling_factor * min_value
+    
+    jingle_normalized = scaling_factor * jingle + offset
+    write_and_play(fs, jingle_normalized, "jingle")
+    # Quantize with 3 bits
+    jingleQuant, _ = quantize(jingle_normalized, 3)
+    write_and_play(fs, jingleQuant, "jingle_quantized_3-bits")
+    # Quantize with 2 bits
+    jingleQuant, _ = quantize(jingle_normalized, 2)
+    write_and_play(fs, jingleQuant, "jingle_quantized_2-bits")
 
-    pl.show()
 
 if __name__ == "__main__":
-    main()
+    example1()
+    example2()
+    example3()
+    pl.show()
+
