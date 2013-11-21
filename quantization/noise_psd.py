@@ -9,7 +9,7 @@ import numpy
 import os
 import pylab as pl
 import scipy.signal as signal
-from scipy.io import loadmat, wavfile
+from scipy.io import wavfile
 
 
 def nextpow2(n):
