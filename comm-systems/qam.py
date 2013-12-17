@@ -23,6 +23,7 @@ def qam_symbols(M, G=1):
       symbols[idx_i, idx_r] = G * (ar[idx_r] + 1j * ai[idx_i])
   return symbols
 
+
 def plot_constallation(c):
   c = np.squeeze(c.flatten(order = 'F'))
   pl.plot(c.real, c.imag, 'bo', markersize=7)
